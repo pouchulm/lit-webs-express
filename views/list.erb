@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charaset="utf-8">
+	<meta name="description" content="緯度経度から最寄駅を表示させるサイトです">
+    <meta propaty="og:image" content="http://localhost:32771/public/logo.png">
+    <meta propaty="og:title" content="Express">
+    <meta propaty="og:description" content="緯度経度から最寄駅を表示させるサイトです">
+    <title>Express</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<style>
+	table{
+		width: 500px;
+		border-collapse: collapse;
+		padding : 3px;
+	}
+	table th, table td{
+		border: solid 1px #333;
+		text-align: center;
+	}
+	</style>
+</head>
+<body>
+
+
+
+	<div class="container">
+	<h2>検索結果</h2>
+	<table>
+		<th>路線名</th><th>最寄駅</th><th>前の駅</th><th>次の駅</th>
+		<% @stations.each do |station| %>
+		<tr class="station">
+			<td class="line"><%= station["line"] %></td>
+			<td class="name"><a href="https://www.google.co.jp/maps?q=<%= station['name'] %>"><%= station['name'] %></a></td>
+			<td class="prev"><a href="https://www.google.co.jp/maps?q=<%= station['prev'] %>"><%= station["prev"] %></td>
+			<td class="next"><a href="https://www.google.co.jp/maps?q=<%= station['next'] %>"><%= station["next"] %></td>
+		</tr>
+		<% end %>
+
+	</table>
+			<div id="nextdetail">
+			<h3>次の駅</h3>
+			<div class="next"></div>
+		</div>
+		<div id="prevdetail">
+			<h3>前の駅</h3>
+			<div class="prev"></div>
+		</div>
+		<a href="./">検索画面に戻る</a>
+		</div>
+		<script>
+			window.onload = function () {
+				$(".station").click(function(){
+					var line = $(".line",this).text();
+					var name = $(".name",this).text();
+					$.ajax("/api/station",{
+						type: "GET",
+						data: {"line": line, "name": name},
+						datatype: 'json'
+					})
+					.done(function(json){
+						$("#nextdetail .next").text(json["next"])
+						$("#prevdetail .prev").text(json["prev"])
+					});
+				});
+			}
+			</script>
+</body>
+</html>
