@@ -11,13 +11,12 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 
 gem 'sinatra-activerecord'
-gem 'sqlite3'
 gem 'rake'
 
 group :production do
-gem 'pg' , '~> 0.18'
+  gem 'pg' , '~> 0.18'
 end
 
 group :development do
-gem 'sqlite3'
+  gem 'sqlite3'
 end
