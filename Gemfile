@@ -15,7 +15,7 @@ gem 'sqlite3'
 gem 'rake'
 
 group :production do
-gem 'pg' , '~>0.18'
+gem 'pg' , '~> 0.18'
 end
 
 group :development do
